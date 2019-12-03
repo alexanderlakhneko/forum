@@ -1,0 +1,95 @@
+version: '3.7'
+
+services:
+  nginx:
+    image: core_nginx
+    build:
+      context: .
+      dockerfile: nginx/docker/Dockerfile
+    command:  ["/bin/sh", "-c", "/usr/share/nginx/dockerize.sh"]
+    depends_on:
+      - app
+    ports:
+      - 80:80
+    volumes:
+      - ./public:/usr/share/nginx/html
+    networks:
+      - dev-network
+  app:
+    image: core_app
+    build:
+      context: .
+      dockerfile: laraApp/docker/Dockerfile
+    command:  ["app"]
+    depends_on:
+      - db
+      - redis
+    volumes:
+      - ./laraApp:/app
+    environment:
+      XDEBUG_CONFIG: "remote_host=192.168.220.1  remote_enable=1 remote_autostart=off  remote_port=9009 idekey=PHPSTORM"
+      PHP_IDE_CONFIG: "serverName=two"
+    networks:
+      - dev-network
+  worker:
+    image: core_app
+    build:
+      context: .
+      dockerfile: laraApp/docker/Dockerfile
+    command:  ["worker"]
+    depends_on:
+      - db
+      - redis
+    volumes:
+      - ./laraApp:/app
+    environment:
+      XDEBUG_CONFIG: "remote_host=192.168.220.1 remote_enable=1 remote_autostart=off  remote_port=9009 idekey=PHPSTORM"
+      PHP_IDE_CONFIG: "serverName=two"
+    networks:
+      - dev-network
+  cron:
+    image: core_app
+    build:
+      context: .
+      dockerfile: laraApp/docker/Dockerfile
+    command:  ["cron"]
+    depends_on:
+      - db
+      - redis
+    volumes:
+      - ./laraApp:/app
+    environment:
+      XDEBUG_CONFIG: "remote_host=192.168.220.1 remote_enable=1 remote_autostart=off  remote_port=9009 idekey=PHPSTORM"
+      PHP_IDE_CONFIG: "serverName=two"
+    networks:
+      - dev-network
+  db:
+    image: postgres:12.1-alpine
+    ports:
+      - 5432:5432
+    env_file:
+      - .postgr-env
+    volumes:
+      - pgdata:/var/lib/postgresql/pgdata
+    networks:
+      - dev-network
+  redis:
+    image: redis:4-alpine
+    volumes:
+      - redisdata:/data
+    ports:
+      - 6379:6379
+    networks:
+      - dev-network
+
+volumes:
+  pgdata:
+  redisdata:
+
+networks:
+  dev-network:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 192.168.220.0/28

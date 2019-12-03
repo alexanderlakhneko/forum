@@ -1,0 +1,10 @@
+.git
+/laraApp/vendor
+.idea
+!.gitignore
+.postgr-env
+/.phpstorm.meta.php
+/laraApp/_ide_helper.php
+docker-compose.yml
+docker-compose.test.yml
+/laraApp/node_modules
