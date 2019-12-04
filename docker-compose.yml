@@ -12,7 +12,7 @@ services:
     ports:
       - 80:80
     volumes:
-      - ./public:/usr/share/nginx/html
+      - ./laraApp/public:/usr/share/nginx/html
     networks:
       - dev-network
   app:
