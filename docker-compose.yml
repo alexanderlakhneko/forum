@@ -12,57 +12,49 @@ services:
     ports:
       - 80:80
     volumes:
-      - ./laraApp/public:/usr/share/nginx/html
-    networks:
-      - dev-network
+      - ./application/public:/usr/share/nginx/html
+
   app:
     image: core_app
     build:
       context: .
-      dockerfile: laraApp/docker/Dockerfile
+      dockerfile: application/docker/Dockerfile
     command:  ["app"]
     depends_on:
       - db
       - redis
     volumes:
-      - ./laraApp:/app
-    environment:
-      XDEBUG_CONFIG: "remote_host=192.168.220.1  remote_enable=1 remote_autostart=off  remote_port=9009 idekey=PHPSTORM"
-      PHP_IDE_CONFIG: "serverName=two"
-    networks:
-      - dev-network
+      - ./application:/app
+    env_file:
+      - .xdebug-env
   worker:
     image: core_app
     build:
       context: .
-      dockerfile: laraApp/docker/Dockerfile
+      dockerfile: application/docker/Dockerfile
     command:  ["worker"]
     depends_on:
       - db
       - redis
     volumes:
-      - ./laraApp:/app
-    environment:
-      XDEBUG_CONFIG: "remote_host=192.168.220.1 remote_enable=1 remote_autostart=off  remote_port=9009 idekey=PHPSTORM"
-      PHP_IDE_CONFIG: "serverName=two"
-    networks:
-      - dev-network
+      - ./application:/app
+    env_file:
+      - .xdebug-env
+
   cron:
     image: core_app
     build:
       context: .
-      dockerfile: laraApp/docker/Dockerfile
+      dockerfile: application/docker/Dockerfile
     command:  ["cron"]
     depends_on:
       - db
       - redis
     volumes:
-      - ./laraApp:/app
-    environment:
-      XDEBUG_CONFIG: "remote_host=192.168.220.1 remote_enable=1 remote_autostart=off  remote_port=9009 idekey=PHPSTORM"
-      PHP_IDE_CONFIG: "serverName=two"
-    networks:
-      - dev-network
+      - ./application:/app
+    env_file:
+      - .xdebug-env
+
   db:
     image: postgres:12.1-alpine
     ports:
@@ -71,25 +63,15 @@ services:
       - .postgr-env
     volumes:
       - pgdata:/var/lib/postgresql/pgdata
-    networks:
-      - dev-network
+
   redis:
     image: redis:4-alpine
     volumes:
       - redisdata:/data
     ports:
       - 6379:6379
-    networks:
-      - dev-network
+
 
 volumes:
   pgdata:
   redisdata:
-
-networks:
-  dev-network:
-    driver: bridge
-    ipam:
-      driver: default
-      config:
-        - subnet: 192.168.220.0/28

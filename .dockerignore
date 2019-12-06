@@ -1,10 +1,14 @@
 .git
-/laraApp/vendor
+/application/vendor
 .idea
 !.gitignore
 .postgr-env
+.postgr-env.exemple
+.xdebug-env.exemple
+.xdebug-env
 /.phpstorm.meta.php
-/laraApp/_ide_helper.php
+/application/_ide_helper.php
 docker-compose.yml
 docker-compose.test.yml
-/laraApp/node_modules
+docker-compose.prod.yml
+/application/node_modules

@@ -1,1 +1,3 @@
 .idea
+#.postgr-env
+.xdebug-env

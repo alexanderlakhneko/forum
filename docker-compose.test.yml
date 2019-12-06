@@ -5,7 +5,7 @@ services:
     image: core_app
     build:
       context: .
-      dockerfile: laraApp/docker/Dockerfile
+      dockerfile: application/docker/Dockerfile
     command:  ["test"]
     depends_on:
       - db
