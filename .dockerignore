@@ -3,9 +3,7 @@
 .idea
 !.gitignore
 .postgr-env
-.postgr-env.exemple
-.xdebug-env.exemple
-.xdebug-env
+.postgr-env.example
 /.phpstorm.meta.php
 /application/_ide_helper.php
 docker-compose.yml

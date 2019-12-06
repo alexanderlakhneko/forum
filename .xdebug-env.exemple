@@ -1,3 +1,0 @@
-PHP_EXTENSION_XDEBUG=1
-XDEBUG_CONFIG="remote_host=localhost remote_enable=1 idekey=PHPSTORM remote_port=9009 remote_autostart=0 remote_connect_back=1"
-PHP_IDE_CONFIG="serverName=two"

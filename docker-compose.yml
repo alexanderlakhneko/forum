@@ -25,8 +25,7 @@ services:
       - redis
     volumes:
       - ./application:/app
-    env_file:
-      - .xdebug-env
+
   worker:
     image: core_app
     build:
@@ -38,8 +37,6 @@ services:
       - redis
     volumes:
       - ./application:/app
-    env_file:
-      - .xdebug-env
 
   cron:
     image: core_app
@@ -52,8 +49,6 @@ services:
       - redis
     volumes:
       - ./application:/app
-    env_file:
-      - .xdebug-env
 
   db:
     image: postgres:12.1-alpine
