@@ -8,7 +8,7 @@ RUN wget https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSI
 COPY /nginx/nginx.conf /etc/nginx/nginx.conf
 COPY /nginx/default.conf /etc/nginx/conf.d/default.conf
 RUN echo "daemon off;" >> /etc/nginx/nginx.conf
-COPY /laraApp/public/ /usr/share/nginx/html
+COPY /application /usr/share/nginx/html
 COPY /nginx/docker/dockerize.sh /usr/share/nginx/
 
 RUN rm -rf /usr/share/nginx/html/index.html

@@ -23,7 +23,7 @@ RUN apk --update --repository http://dl-cdn.alpinelinux.org/alpine/edge/communit
     && docker-php-ext-enable apcu \
     && docker-php-ext-install opcache \
     && pecl install xdebug-2.8.0 \
-    && apk del autoconf g++ make zlib-dev gcc autoconf libgcc \
+    file:///home/admin/Downloads/Лахнеко&& apk del autoconf g++ make zlib-dev gcc autoconf libgcc \
     && rm -rf /var/cache/apk/*
 
 RUN groupadd -r web \
@@ -48,13 +48,13 @@ RUN wget https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSI
     && rm dockerize-alpine-linux-amd64-$DOCKERIZE_VERSION.tar.gz
 
 COPY --from=composer:1.9 /usr/bin/composer /usr/bin/composer
-COPY /application/docker/xdebug.ini /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+COPY /docker/xdebug.ini /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
 
 ENV COMPOSER_CACHE_DIR=/dev/null
 
-COPY application/docker/artisan-cron /etc/cron.d/artisan-cron
+COPY docker/artisan-cron /etc/cron.d/artisan-cron
 
-COPY --chown=web:web application/docker/dockerize.sh /usr/local/bin/
+COPY --chown=web:web docker/dockerize.sh /usr/local/bin/
 RUN ln -s /usr/local/bin/dockerize.sh /
 ENTRYPOINT ["dockerize.sh"]
 
@@ -62,14 +62,13 @@ USER web
 
 WORKDIR /app
 
-COPY --chown=web:web application/composer.json /app/composer.json
-COPY --chown=web:web application/composer.lock /app/composer.lock
+COPY --chown=web:web composer.json /app/composer.json
+COPY --chown=web:web composer.lock /app/composer.lock
 
 ARG env
 
+RUN  if [ "$env" != "dev" ] ; then /usr/bin/composer install --no-dev --no-autoloader --no-plugins --ignore-platform-reqs --no-scripts --no-progress --no-suggest; fi
+
 COPY --chown=web:web . /app
 
-
-
-
-
+RUN if [ "$env" != "dev" ] ; then /usr/bin/composer dump-autoload -o --apcu ; fi

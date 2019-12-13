@@ -17,38 +17,44 @@ services:
   app:
     image: core_app
     build:
-      context: .
-      dockerfile: application/docker/Dockerfile
+      context: ./application
+      dockerfile: docker/Dockerfile
     command:  ["app"]
     depends_on:
       - db
       - redis
     volumes:
       - ./application:/app
+    environment:
+      PHP_IDE_CONFIG: "serverName=two"
 
   worker:
     image: core_app
     build:
-      context: .
-      dockerfile: application/docker/Dockerfile
+      context: ./application
+      dockerfile: docker/Dockerfile
     command:  ["worker"]
     depends_on:
       - db
       - redis
     volumes:
       - ./application:/app
+    environment:
+      PHP_IDE_CONFIG: "serverName=two"
 
   cron:
     image: core_app
     build:
-      context: .
-      dockerfile: application/docker/Dockerfile
+      context: ./application
+      dockerfile: docker/Dockerfile
     command:  ["cron"]
     depends_on:
       - db
       - redis
     volumes:
       - ./application:/app
+    environment:
+      PHP_IDE_CONFIG: "serverName=two"
 
   db:
     image: postgres:12.1-alpine
