@@ -1,4 +1,4 @@
-FROM php:7.3-fpm-alpine
+FROM php:7.4-fpm-alpine
 
 RUN apk --update --repository http://dl-cdn.alpinelinux.org/alpine/edge/community/ add \
             git \
@@ -15,21 +15,33 @@ RUN apk --update --repository http://dl-cdn.alpinelinux.org/alpine/edge/communit
             tzdata \
             gnu-libiconv \
             postgresql-dev \
+            oniguruma-dev \
             libzip-dev \
+            libpng \
+            libpng-dev \
+            libjpeg-turbo \
+            libjpeg-turbo-dev \
+            freetype \
+            freetype-dev \
     && NPROC=$(grep -c ^processor /proc/cpuinfo 2>/dev/null || 1) \
     && docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql \
-    && docker-php-ext-install -j${NPROC} pdo_pgsql pgsql zip pcntl mbstring bcmath \
+    && docker-php-ext-configure gd --with-freetype --with-jpeg \
+    && docker-php-ext-install -j${NPROC} pdo_pgsql pgsql zip pcntl bcmath gd \
     && pecl install apcu \
     && docker-php-ext-enable apcu \
     && docker-php-ext-install opcache \
-    && pecl install xdebug-2.8.0 \
-    file:///home/admin/Downloads/Лахнеко&& apk del autoconf g++ make zlib-dev gcc autoconf libgcc \
+    && pecl install redis \
+    && docker-php-ext-enable redis \
+    && apk del autoconf g++ make zlib-dev gcc autoconf libgcc libpng-dev libjpeg-turbo-dev freetype-dev\
     && rm -rf /var/cache/apk/*
 
 RUN groupadd -r web \
     && useradd -u 1000 -l -r -m -g web web \
     && mkdir /app \
     && chown web:web /app
+
+
+COPY /docker/php.ini "$PHP_INI_DIR/php.ini"
 
 ENV SUPERCRONIC_URL=https://github.com/aptible/supercronic/releases/download/v0.1.9/supercronic-linux-amd64 \
     SUPERCRONIC=supercronic-linux-amd64 \
@@ -48,7 +60,6 @@ RUN wget https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSI
     && rm dockerize-alpine-linux-amd64-$DOCKERIZE_VERSION.tar.gz
 
 COPY --from=composer:1.9 /usr/bin/composer /usr/bin/composer
-COPY /docker/xdebug.ini /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
 
 ENV COMPOSER_CACHE_DIR=/dev/null
 
