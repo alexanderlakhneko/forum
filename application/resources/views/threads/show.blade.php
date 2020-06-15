@@ -5,8 +5,11 @@
         <div class="row justify-content-center">
             <div class="col-md-8">
                 <div class="card">
-                    <a href="#">{{$thread->creator->name}}</a> posted:
-                    <div class="card-header">{{ $thread->title }}</div>
+                    <div class="card-header">
+                        <a href="#">{{$thread->creator->name}}</a> posted:
+                        {{ $thread->title }}
+                    </div>
+
 
                     <div class="card-body">
                         {{ $thread->body }}
@@ -15,14 +18,33 @@
             </div>
         </div>
 
-
-        <div class="row justify-content-center">
+        <div class="row justify-content-center mt-4">
             <div class="col-md-8">
                 @foreach($thread->replies as $reply)
                     @include('threads.reply')
                 @endforeach
             </div>
         </div>
+
+        @if(auth()->check())
+            <div class="row justify-content-center mt-4">
+                <div class="col-md-8">
+                    <form method="POST" action="{{route('replies.store', ['thread' => $thread->id])}}">
+                        @csrf
+                        <div class="form-group">
+                            <label for="body">Body:</label>
+                            <textarea name="body" id="body" placeholder="Have something to say?" rows="5"
+                                      class="form-control"></textarea>
+                        </div>
+                        <button type="submit"
+                                class="btn btn-primary "> Post
+                        </button>
+                    </form>
+                </div>
+            </div>
+        @else
+            <p class="text-center">Please <a href="{{route('login')}}">sign in</a> to participate in this discussion.</p>
+        @endif
 
     </div>
 @endsection
