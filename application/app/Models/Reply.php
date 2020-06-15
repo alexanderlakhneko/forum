@@ -11,9 +11,12 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Reply newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Reply query()
  * @mixin \Eloquent
+ * @property-read \App\Models\User $owner
  */
 class Reply extends Model
 {
+    protected $guarded = [];
+
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
