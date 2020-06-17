@@ -4,7 +4,6 @@ namespace Tests\Feature;
 
 use App\Models\Reply;
 use App\Models\Thread;
-use App\Models\User;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Tests\TestCase;
@@ -22,7 +21,7 @@ class ParticipateInForumTest extends TestCase
 
         $reply = create(Reply::class);
 
-        $this->post($thread->path() . '/replies', $reply->toArray());
+        $this->post(route('replies.store', ['thread' => $thread->id]), $reply->toArray());
     }
 
     /** @test */
@@ -34,9 +33,9 @@ class ParticipateInForumTest extends TestCase
 
         $reply = make(Reply::class);
 
-        $this->post($thread->path() . '/replies', $reply->toArray());
+        $this->post(route('replies.store', ['thread' => $thread->id]), $reply->toArray());
 
-        $this->get($thread->path())
+        $this->get(route('threads.show', ['thread' => $thread->id]))
             ->assertSee($reply->body);
     }
 }

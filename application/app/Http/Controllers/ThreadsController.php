@@ -12,7 +12,7 @@ class ThreadsController extends Controller
      */
     public function __construct()
     {
-       $this->middleware('auth')->only('store');
+       $this->middleware('auth')->except(['index', 'show']);
     }
 
     /**
@@ -30,11 +30,11 @@ class ThreadsController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function create()
     {
-        //
+        return view('threads.create');
     }
 
     /**
@@ -51,7 +51,7 @@ class ThreadsController extends Controller
             'body'    => $request->input('body'),
         ]);
 
-        return redirect($thread->path());
+        return redirect(route('threads.show', ['thread' => $thread->id]));
     }
 
     /**

@@ -19,14 +19,6 @@ class Thread extends Model
     protected $guarded = [];
 
     /**
-     * @return string
-     */
-    public function path()
-    {
-        return '/threads/' . $this->id;
-    }
-
-    /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function replies()

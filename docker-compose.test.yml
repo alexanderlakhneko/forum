@@ -1,19 +1,24 @@
 version: '3.7'
 
 services:
-  app:
+  test:
     image: core_app
+    container_name: forum_test
     build:
-      context: .
-      dockerfile: application/docker/Dockerfile
+      context: ./application
+      dockerfile: docker/Dockerfile
     command:  ["test"]
     depends_on:
-      - db
+      - test_db
     volumes:
-      - .:/app
-  db:
+      - ./application:/app
+    env_file:
+      - ./application/.env.testing
+
+  test_db:
     image: postgres:12.1-alpine
+    container_name: forum_test_db
     ports:
-      - 5432:5432
+      - 5433:5433
     env_file:
       - .postgr-env
