@@ -13,6 +13,22 @@ use Illuminate\Database\Eloquent\Model;
  * @mixin \Eloquent
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Reply[] $replies
  * @property-read int|null $replies_count
+ * @property int $id
+ * @property int $user_id
+ * @property int $channel_id
+ * @property string $title
+ * @property string $body
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\Channel $channel
+ * @property-read \App\Models\User $creator
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Thread whereBody($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Thread whereChannelId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Thread whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Thread whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Thread whereTitle($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Thread whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Thread whereUserId($value)
  */
 class Thread extends Model
 {

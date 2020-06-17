@@ -42,9 +42,16 @@ class ThreadsController extends Controller
      *
      * @param Request $request
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     * @throws \Illuminate\Validation\ValidationException
      */
     public function store(Request $request)
     {
+        $this->validate($request, [
+            'title'      => 'required',
+            'body'       => 'required',
+            'channel_id' => 'required|exists:channels,id',
+        ]);
+
         $thread = Thread::create([
             'user_id'    => auth()->id(),
             'channel_id' => $request->input('channel_id'),
