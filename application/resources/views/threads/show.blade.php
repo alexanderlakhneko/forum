@@ -29,7 +29,7 @@
         @if(auth()->check())
             <div class="row justify-content-center mt-4">
                 <div class="col-md-8">
-                    <form method="POST" action="{{route('replies.store', ['thread' => $thread->id])}}">
+                    <form method="POST" action="{{ $thread->path() . '/replies' }}">
                         @csrf
                         <div class="form-group">
                             <label for="body">Body:</label>

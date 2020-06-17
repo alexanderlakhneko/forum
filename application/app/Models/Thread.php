@@ -19,6 +19,16 @@ class Thread extends Model
     protected $guarded = [];
 
     /**
+     * Get a string path for the thread.
+     *
+     * @return string
+     */
+    public function path()
+    {
+        return "/threads/{$this->channel->slug}/{$this->id}";
+    }
+
+    /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function replies()
@@ -34,8 +44,16 @@ class Thread extends Model
         return $this->belongsTo(User::class, 'user_id');
     }
 
+    /**
+     * @param $reply
+     */
     public function addReply($reply)
     {
         $this->replies()->create($reply);
+    }
+
+    public function channel()
+    {
+        return $this->belongsTo(Channel::class);
     }
 }
