@@ -21,7 +21,7 @@ Route::get('/home', 'HomeController@index')->name('home');
 
 Route::get('/home', 'HomeController@index');
 Route::get('threads', 'ThreadsController@index')->name('threads.index');
-Route::get('threads/create', 'ThreadsController@create');
+Route::get('threads/create', 'ThreadsController@create')->name('threads.create');
 Route::get('threads/{channel}', 'ThreadsController@index');
 Route::get('threads/{channel}/{thread}', 'ThreadsController@show');
 Route::post('threads', 'ThreadsController@store')->name('threads.store');
