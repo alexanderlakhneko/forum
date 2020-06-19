@@ -68,8 +68,16 @@ class Thread extends Model
         $this->replies()->create($reply);
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function channel()
     {
         return $this->belongsTo(Channel::class);
+    }
+
+    public function scopeFilter($query, $filter)
+    {
+        return $filter->apply($query);
     }
 }
