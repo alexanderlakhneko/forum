@@ -29,10 +29,20 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Thread whereTitle($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Thread whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Thread whereUserId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Thread filter($filter)
  */
 class Thread extends Model
 {
     protected $guarded = [];
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::addGlobalScope('replyCount', function ($builder) {
+            $builder->withCount('replies');
+        });
+    }
 
     /**
      * Get a string path for the thread.
@@ -76,6 +86,11 @@ class Thread extends Model
         return $this->belongsTo(Channel::class);
     }
 
+    /**
+     * @param $query
+     * @param $filter
+     * @return mixed
+     */
     public function scopeFilter($query, $filter)
     {
         return $filter->apply($query);
